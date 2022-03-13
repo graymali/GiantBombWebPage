@@ -17,14 +17,14 @@ import gravie.test.GiantBombWebPage.tomcat.transactions.objects.Item;
 @Controller
 @RequestMapping(value = "cart")
 public class CartController {
+	
+	//TODO: Set timeout for rented games. Will need to implement date/time that the game was rented. 
 
 	@RequestMapping(value = "index", method = RequestMethod.GET)
 	public String index() {
 		return "cart/index";
 	}
 	
-	//TODO: be able to add multiple copies of games at once (rather than one at a time)
-
 	@RequestMapping(value = "buy/{guid}", method = RequestMethod.GET)
 	public String buy(@PathVariable("guid") String guid, HttpSession session) {
 		GiantBombTransactions gbt = new GiantBombTransactions();

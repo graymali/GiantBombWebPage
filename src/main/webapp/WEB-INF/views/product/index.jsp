@@ -14,7 +14,7 @@
 			<th>GUID</th>
 			<th>Photo</th>
 			<th>Name</th>
-			<th>Buy</th>
+			<th>Rent</th>
 		</tr>
 		<c:forEach var="game" items="${gameList.results }">
 			<tr>
@@ -22,7 +22,7 @@
 				<td><img src="${game.image.icon_url }"></td>
 				<td>${game.name }</td>
 				<td align="center">
-					<a href="${pageContext.request.contextPath }/cart/buy/${game.guid}">Buy Now</a>
+					<a href="${pageContext.request.contextPath }/cart/buy/${game.guid}">Rent Now</a>
 				</td>
 			</tr>
 		</c:forEach>

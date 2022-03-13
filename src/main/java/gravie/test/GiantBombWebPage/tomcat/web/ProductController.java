@@ -12,6 +12,10 @@ import gravie.test.GiantBombWebPage.tomcat.transactions.objects.GameList;
 @RequestMapping(value = "product")
 public class ProductController {
 	
+	//TODO: add search function to Product page so users can find the game they want
+	
+	//TODO: be able to add multiple copies of games at once (rather than one at a time)
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public String index(ModelMap modelMap) {
 		GiantBombTransactions gbt = new GiantBombTransactions();
@@ -22,6 +26,4 @@ public class ProductController {
 		return "product/index";
 	}
 	
-	//TODO: add search function to Product page so users can find the game they want
-
 }
