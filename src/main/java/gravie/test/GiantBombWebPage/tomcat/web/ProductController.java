@@ -15,11 +15,13 @@ public class ProductController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String index(ModelMap modelMap) {
 		GiantBombTransactions gbt = new GiantBombTransactions();
+		//Get the top 20 games in name order
+		//TODO: implement pages and allow user to view all games rather than just the top 20
 		GameList gameList = gbt.GetGames(20, "name:asc");
 		modelMap.put("gameList", gameList);
 		return "product/index";
 	}
 	
-	
+	//TODO: add search function to Product page so users can find the game they want
 
 }

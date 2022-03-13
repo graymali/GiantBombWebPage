@@ -22,13 +22,19 @@ public class CartController {
 	public String index() {
 		return "cart/index";
 	}
+	
+	//TODO: be able to add multiple copies of games at once (rather than one at a time)
 
 	@RequestMapping(value = "buy/{guid}", method = RequestMethod.GET)
 	public String buy(@PathVariable("guid") String guid, HttpSession session) {
 		GiantBombTransactions gbt = new GiantBombTransactions();
+		//Create a cart object if none exists
 		if (session.getAttribute("cart") == null) {
 			List<Item> cart = new ArrayList<Item>();
+			//Find the game to add to cart
 			Game game = gbt.GetGame(guid);
+			//If the game doesn't exist don't try to add it
+			//TODO: return an error message that it can't add to cart, and send user back to Product page
 			if(game != null) {
 				cart.add(new Item(game, 1));
 			}
@@ -36,8 +42,12 @@ public class CartController {
 		} else {
 			List<Item> cart = (List<Item>) session.getAttribute("cart");
 			int index = this.exists(guid, cart);
+			//If the game already exists in the cart just increase the quantity
 			if (index == -1) {
+				//Find the game to add to cart
 				Game game = gbt.GetGame(guid);
+				//If the game doesn't exist don't try to add it
+				//TODO: return an error message that it can't add to cart, and send user back to Product page
 				if(game != null) {
 					cart.add(new Item(game, 1));
 				}

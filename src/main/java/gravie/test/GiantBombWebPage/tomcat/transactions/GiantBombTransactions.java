@@ -26,6 +26,8 @@ public class GiantBombTransactions {
 	public GiantBombTransactions() {
 
 	}
+	
+	//TODO: Build and send REST request in it's own function so you don't need to do it in every call.
 
 	public GameList GetGames(int limit, String sort) {
 		log.info(">>>>GetGames: " + limit + "," + sort);
@@ -102,5 +104,5 @@ public class GiantBombTransactions {
 		log.info("<<<<GetGame");
 		return game;
 	}
-
+	
 }
