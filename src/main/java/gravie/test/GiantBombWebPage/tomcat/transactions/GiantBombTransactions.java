@@ -27,8 +27,6 @@ public class GiantBombTransactions {
 
 	}
 	
-	//TODO: update request to include "field_list" to reduce the returned object size
-	
 	private RestTemplate buildRestTemplate() {
 		//Accept all certificates for an HTTPS connection
 		//TODO: load the giantbomb certificate and only accept that one
@@ -56,6 +54,7 @@ public class GiantBombTransactions {
 		//Build the URL
 		//TODO: make sure the limit and sort are valid inputs
 		String url = Constants.URL + "/games/?api_key=" + Constants.API_KEY + "&format=json"
+				+ "&field_list=id,guid,name,image,description"
 				+ "&offset=" + offset + "&limit=" + limit + "&sort=" + sort ;
 		log.info("url: " + url);
 
@@ -82,7 +81,8 @@ public class GiantBombTransactions {
 		
 		//Build the URL
 		//TODO: make sure the guid is a valid input
-		String url = Constants.URL + "/game/" +  guid + "/?api_key=" + Constants.API_KEY + "&format=json";
+		String url = Constants.URL + "/game/" +  guid + "/?api_key=" + Constants.API_KEY + "&format=json"
+				+ "&field_list=id,guid,name,image,description";
 		log.info("url: " + url);
 
 		Game game = null;
