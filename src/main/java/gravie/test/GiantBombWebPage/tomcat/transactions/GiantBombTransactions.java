@@ -68,13 +68,13 @@ public class GiantBombTransactions {
 		String url = Constants.URL + "/games/?api_key=" + Constants.API_KEY + "&format=json"
 				+ "&field_list=id,guid,name,image,description"
 				+ "&sort=" + sort ;
-		if(offset != -1) {
+		if(offset > -1) {
 			url += "&offset=" + offset ;
 		}
 		if(searchName != null) {
 			url += "&filter=name:" + searchName ;
 		}
-		if(limit != -1) {
+		if(limit > 0) {
 			url += "&limit=" + limit;
 		}
 		log.info("url: " + url);
