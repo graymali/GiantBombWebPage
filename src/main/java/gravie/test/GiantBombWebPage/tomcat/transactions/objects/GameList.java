@@ -14,6 +14,7 @@ public class GameList {
 	private Long status_code;
 	private int offset = 0;
 	private List<Game> results;
+	private String searchName;
 	
 	public GameList() {
 	}
@@ -65,6 +66,12 @@ public class GameList {
 			currentPage = (int) (offset / number_of_page_results) + 1;
 		}
 		return currentPage;
+	}
+	public String getSearchName() {
+		return searchName;
+	}
+	public void setSearchName(String searchName) {
+		this.searchName = searchName;
 	}
 	@Override
 	public String toString() {

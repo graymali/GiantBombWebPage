@@ -45,17 +45,38 @@ public class GiantBombTransactions {
 	}
 	
 	public GameList GetGames(int limit, String sort) {
-		return GetGames(0, limit, sort);
+		return GetGames(0, null, limit, sort);
+	}
+	
+	public GameList GetGames(int offset, int limit, String sort) {
+		return GetGames(offset, null, limit, sort);
+	}
+	
+	public GameList GetGames(String searchName, String sort) {
+		return GetGames(-1, searchName, -1, sort);
+	}
+	
+	public GameList GetGames(String searchName, int limit, String sort) {
+		return GetGames(-1, searchName, limit, sort);
 	}
 
-	public GameList GetGames(int offset, int limit, String sort) {
-		log.info(">>>>GetGames: " + offset + "," + limit + "," + sort);
+	public GameList GetGames(int offset, String searchName, int limit, String sort) {
+		log.info(">>>>GetGames: " + offset + "," + searchName + "," + limit + "," + sort);
 		
 		//Build the URL
-		//TODO: make sure the limit and sort are valid inputs
+		//TODO: make sure the inputs are valid
 		String url = Constants.URL + "/games/?api_key=" + Constants.API_KEY + "&format=json"
 				+ "&field_list=id,guid,name,image,description"
-				+ "&offset=" + offset + "&limit=" + limit + "&sort=" + sort ;
+				+ "&sort=" + sort ;
+		if(offset != -1) {
+			url += "&offset=" + offset ;
+		}
+		if(searchName != null) {
+			url += "&filter=name:" + searchName ;
+		}
+		if(limit != -1) {
+			url += "&limit=" + limit;
+		}
 		log.info("url: " + url);
 
 		GameList gamesArray = new GameList();
@@ -66,7 +87,7 @@ public class GiantBombTransactions {
             HttpEntity<String> entity = buildHeaderEntity();
 			ResponseEntity<GameList> response = restTemplate.exchange(url, HttpMethod.GET, entity, GameList.class);
 			gamesArray = response.getBody();
-			log.info(gamesArray.toString());
+			//log.info(gamesArray.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.error(e.getMessage());
@@ -94,7 +115,7 @@ public class GiantBombTransactions {
             HttpEntity<String> entity = buildHeaderEntity();
 			ResponseEntity<SingleGameList> response = restTemplate.exchange(url, HttpMethod.GET, entity, SingleGameList.class);
 			gameList = response.getBody();
-			log.info(gameList.toString());
+			//log.info(gameList.toString());
 			if(gameList != null && gameList.getResults() != null) {
 				game = gameList.getResults();
 				log.info(gameList.toString());
