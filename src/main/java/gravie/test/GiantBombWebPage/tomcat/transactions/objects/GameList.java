@@ -12,6 +12,7 @@ public class GameList {
 	private Long number_of_page_results;
 	private Long number_of_total_results;
 	private Long status_code;
+	private int offset = 0;
 	private List<Game> results;
 	
 	public GameList() {
@@ -46,11 +47,24 @@ public class GameList {
 	public void setNumber_of_total_results(Long number_of_total_results) {
 		this.number_of_total_results = number_of_total_results;
 	}
+	public int getOffset() {
+		return offset;
+	}
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 	public List<Game> getResults() {
 		return results;
 	}
 	public void setResults(List<Game> results) {
 		this.results = results;
+	}
+	public int getCurrentPage() {
+		int currentPage = 1;
+		if(offset != 0) {
+			currentPage = (int) (offset / number_of_page_results) + 1;
+		}
+		return currentPage;
 	}
 	@Override
 	public String toString() {

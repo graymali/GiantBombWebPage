@@ -27,32 +27,44 @@ public class GiantBombTransactions {
 
 	}
 	
-	//TODO: Build and send REST request in it's own function so you don't need to do it in every call.
-
+	//TODO: update request to include "field_list" to reduce the returned object size
+	
+	private RestTemplate buildRestTemplate() {
+		//Accept all certificates for an HTTPS connection
+		//TODO: load the giantbomb certificate and only accept that one
+		CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
+		HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		requestFactory.setHttpClient(httpClient);
+		return new RestTemplate(requestFactory);
+	}
+	
+	private HttpEntity<String> buildHeaderEntity() {
+		//Use "user-agent" to get past 403 error
+		HttpHeaders headers = new HttpHeaders();
+        headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+        return new HttpEntity<String>("parameters", headers);
+	}
+	
 	public GameList GetGames(int limit, String sort) {
-		log.info(">>>>GetGames: " + limit + "," + sort);
+		return GetGames(0, limit, sort);
+	}
+
+	public GameList GetGames(int offset, int limit, String sort) {
+		log.info(">>>>GetGames: " + offset + "," + limit + "," + sort);
 		
 		//Build the URL
 		//TODO: make sure the limit and sort are valid inputs
 		String url = Constants.URL + "/games/?api_key=" + Constants.API_KEY + "&format=json"
-				+"&limit=" + limit + "&sort=" + sort ;
+				+ "&offset=" + offset + "&limit=" + limit + "&sort=" + sort ;
 		log.info("url: " + url);
 
 		GameList gamesArray = new GameList();
 
 		try {
-			//Accept all certificates for an HTTPS connection
-			//TODO: load the giantbomb certificate and only accept that one
-			CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
-			HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-			requestFactory.setHttpClient(httpClient);
-			RestTemplate restTemplate = new RestTemplate(requestFactory);
-			//Use "user-agent" to get past 403 error
-			HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-            //Send REST request
+			//Send REST request
+			RestTemplate restTemplate = buildRestTemplate();
+            HttpEntity<String> entity = buildHeaderEntity();
 			ResponseEntity<GameList> response = restTemplate.exchange(url, HttpMethod.GET, entity, GameList.class);
 			gamesArray = response.getBody();
 			log.info(gamesArray.toString());
@@ -69,7 +81,7 @@ public class GiantBombTransactions {
 		log.info(">>>>GetGame: " + guid);
 		
 		//Build the URL
-		//TODO: make sure the limit and sort are valid inputs
+		//TODO: make sure the guid is a valid input
 		String url = Constants.URL + "/game/" +  guid + "/?api_key=" + Constants.API_KEY + "&format=json";
 		log.info("url: " + url);
 
@@ -77,18 +89,9 @@ public class GiantBombTransactions {
 		SingleGameList gameList = new SingleGameList();
 
 		try {
-			//Accept all certificates for an HTTPS connection
-			//TODO: load the giantbomb certificate and only accept that one
-			CloseableHttpClient httpClient = HttpClients.custom().setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE).build();
-			HttpComponentsClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-			requestFactory.setHttpClient(httpClient);
-			RestTemplate restTemplate = new RestTemplate(requestFactory);
-			//Use "user-agent" to get past 403 error
-			HttpHeaders headers = new HttpHeaders();
-            headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-            headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
-            HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
-            //Send REST request
+			//Send REST request
+			RestTemplate restTemplate = buildRestTemplate();
+            HttpEntity<String> entity = buildHeaderEntity();
 			ResponseEntity<SingleGameList> response = restTemplate.exchange(url, HttpMethod.GET, entity, SingleGameList.class);
 			gameList = response.getBody();
 			log.info(gameList.toString());
